@@ -23,73 +23,47 @@ Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST); //for display without CS p
 //Arduino_ST7789 tft = Arduino_ST7789(TFT_DC, TFT_RST, TFT_MOSI, TFT_SCLK, TFT_CS); //for display with CS pin
 
 float p = 3.1415926;
-
+#define G 9.8
 void setup(void) {
   Serial.begin(9600);
-  Serial.print("Hello! ST7789 TFT Test");
 
   tft.init(240, 240);   // initialize a ST7789 chip, 240x240 pixels
 
   Serial.println("Initialized");
 
-  uint16_t time = millis();
-  tft.fillScreen(WHITE);
-  time = millis() - time;
-
-  Serial.println(time, DEC);
   
   delay(500);
-  // large block of text
-  tft.fillScreen(YELLOW);
-  testdrawtext("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur adipiscing ante sed nibh tincidunt feugiat. Maecenas enim massa, fringilla sed malesuada et, malesuada sit amet turpis. Sed porttitor neque ut ante pretium vitae malesuada nunc bibendum. Nullam aliquet ultrices massa eu hendrerit. Ut sed nisi lorem. In vestibulum purus a tortor imperdiet posuere. ", WHITE);
-  delay(1000);
-
-  // tft print function
-  tftPrintTest();
-  delay(4000);
-
-  // a single pixel
-  tft.drawPixel(tft.width()/2, tft.height()/2, GREEN);
-  delay(500);
-
-  // line draw test
-  testlines(YELLOW);
-  delay(500);
-
-  // optimized lines
-  testfastlines(RED, BLUE);
-  delay(500);
-
-  testdrawrects(GREEN);
-  delay(500);
-
-  testfillrects(YELLOW, MAGENTA);
-  delay(500);
-
+  tft.setTextWrap(false);
   tft.fillScreen(BLACK);
-  testfillcircles(10, BLUE);
-  testdrawcircles(10, WHITE);
-  delay(500);
-
-  testroundrects();
-  delay(500);
-
-  testtriangles();
-  delay(500);
-
-  mediabuttons();
-  delay(500);
-
-  Serial.println("done");
+  tft.setCursor(0, 0);
+  tft.setTextColor(WHITE);
+  tft.setTextSize(3);
+  tft.println("Start CAR");
+  
   delay(1000);
+  tft.fillScreen(BLACK);
 }
 
 void loop() {
-  tft.invertDisplay(true);
-  delay(500);
-  tft.invertDisplay(false);
+  draw_accel(9,9);
   delay(500);
 }
+
+void draw_accel(float X, float Y)//in G
+{
+  X /= G; Y /= G;
+  
+  tft.fillCircle(120,100,5,WHITE);
+  tft.drawCircle(120,100,50,WHITE);
+  tft.drawCircle(120,100,100,WHITE);
+  tft.fillCircle(100*X+100, 100*Y+100, 5, RED);
+  tft.setCursor(0,200);
+  tft.print(X); tft.println("G");
+  tft.setCursor(200,200);
+  tft.print(Y); tft.println("G");
+}
+
+/**OTHERS FUNCTIONS**/
 
 void testlines(uint16_t color) {
   tft.fillScreen(BLACK);
