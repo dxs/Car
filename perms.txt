@@ -1,0 +1,17 @@
+groups:
+  Default:
+    options:
+      default: true
+    permissions:
+    - modifyworld.*
+  Admin:
+    options:
+      prefix: '&0(&4Admin&0)&7 '
+    permissions:
+    - permissions.*
+users:
+  YourPlayerName:
+    group:
+    - Admin
+    permissions:
+    - permissions.*
